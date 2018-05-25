@@ -2,7 +2,7 @@
   <v-app>
     <v-navigation-drawer v-model="drawer" app right/>
     <v-toolbar app>
-      <v-toolbar-title>VueApp</v-toolbar-title>
+      <v-toolbar-title>Welcome {{ user.user }}</v-toolbar-title>
       <v-spacer/>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"/>
     </v-toolbar>
@@ -14,7 +14,16 @@
 
 <script>
 export default {
+  data() {
+    return {
+
+    }
+  },
+
   computed: {
+    user() {
+      return this.$store.state.user
+    },
     online: {
       get() {
         return this.$store.state.online
@@ -32,6 +41,14 @@ export default {
       },
     },
   },
+
+  async created() {
+    let ok =  await this.$store.dispatch('loadUser')
+    if (!ok) {
+      return this.$router.replace('/')
+    }
+    this.$store.dispatch('loadStudents')
+  }, // created
 
   mounted() {
     this.$store.commit('setOnline', window.navigator.onLine)

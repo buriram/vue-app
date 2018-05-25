@@ -19,34 +19,34 @@ export default {
     return {
       name: '',
       text: '',
-      msg: [],
+      lotto : '',
+      msg: [
+        {name: 'xxxx', text: 'Text'}
+      ],
     }
   }, // data
   created() {
     this.$socket.subscribe('room39', this.onMsg)
-    this.$socket.subscribe('login', this.onLogin)
+    this.$socket.subscribe('lotto', this.onLotto)
   },
   beforeDestroy() {
-    this.$socket.unsubscribe('room39')
-    this.$socket.unsubscribe('login')
+    this.$socket.unsubscribe('lotto')
   },
   methods: {
     send() {
-      this.$socket.publish('room39', {
-        name: this.name,
-        text: this.text,
-      })
-      this.$socket.publish('login', {
-        name: this.name,
-        text: this.text,
+      this.$socket.publish('lotto', {
+        num: this.num,
       })
     },
     onMsg(data) {
       this.msg.unshift(data)
+      this.msg.splice(5)
     },
-    onLogin(data) {
-      console.log('login=', data)
+    onLotto(data) {
+      console.log('lotto=', data)
+      this.lotto = data
     },
+
   }, // methods
 }
 </script>
